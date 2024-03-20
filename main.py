@@ -46,3 +46,25 @@ def create_egg():
     eggs.append(new_egg)
     root.after(egg_interval, create_egg)
 
+
+def move_eggs():
+    for egg in eggs:
+        (eggx, eggy, eggx2, eggy2) = c.coords(egg)
+        c.move(egg, 0, 10)
+        if eggy2 > canvas_height:
+            egg_dropped(egg)
+    root.after(egg_speed, move_eggs)
+
+def egg_dropped(egg):
+    eggs.remove(egg)
+    c.delete(egg)
+    lose_a_life()
+    if lives_remaining == 0:
+        messagebox.showinfo("Game Over!", "Final Score: "+ str(score))
+        root.destroy()
+
+def lose_a_life():
+    global lives_remaining
+    lives_remaining -= 1
+    c.itemconfigure(lives_text, text="Lives: "+ str(lives_remaining))
+
