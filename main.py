@@ -68,3 +68,37 @@ def lose_a_life():
     lives_remaining -= 1
     c.itemconfigure(lives_text, text="Lives: "+ str(lives_remaining))
 
+def check_catch():
+    (catcherx, catchery, catcherx2, catchery2) = c.coords(catcher)
+    for egg in eggs:
+        (eggx, eggy, eggx2, eggy2) = c.coords(egg)
+        if catcherx < eggx and eggx2 < catcherx2 and catchery2 - eggy2 < 40:
+            eggs.remove(egg)
+            c.delete(egg)
+            increase_score(egg_score)
+    root.after(100, check_catch)
+
+def increase_score(points):
+    global score, egg_speed, egg_interval
+    score += points
+    egg_speed = int(egg_speed * difficulty)
+    egg_interval = int(egg_interval * difficulty)
+    c.itemconfigure(score_text, text="Score: "+ str(score))
+
+def move_left(event):
+    (x1, y1, x2, y2) = c.coords(catcher)
+    if x1 > 0:
+        c.move(catcher, -20, 0)
+
+def move_right(event):
+    (x1, y1, x2, y2) = c.coords(catcher)
+    if x2 < canvas_width:
+        c.move(catcher, 20, 0)
+
+c.bind("<Left>", move_left)
+c.bind("<Right>", move_right)
+c.focus_set()
+root.after(1000, create_egg)
+root.after(1000, move_eggs)
+root.after(1000, check_catch)
+root.mainloop()
