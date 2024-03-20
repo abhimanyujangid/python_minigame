@@ -29,3 +29,20 @@ catcher_starty2 = catcher_starty + catcher_height
 catcher = c.create_arc(catcher_startx, catcher_starty, catcher_startx2, catcher_starty2, start=200, extent=140, style="arc", outline=catcher_color, width=3)
 game_font = font.nametofont("TkFixedFont")
 game_font.config(size=18)
+
+
+score = 0
+score_text = c.create_text(10, 10, anchor="nw", font=game_font, fill="darkblue", text="Score: "+ str(score))
+
+lives_remaining = 3
+lives_text = c.create_text(canvas_width-10, 10, anchor="ne", font=game_font, fill="darkblue", text="Lives: "+ str(lives_remaining))
+
+eggs = []
+
+def create_egg():
+    x = randrange(10, 740)
+    y = 40
+    new_egg = c.create_oval(x, y, x+egg_width, y+egg_height, fill=next(color_cycle), width=0)
+    eggs.append(new_egg)
+    root.after(egg_interval, create_egg)
+
